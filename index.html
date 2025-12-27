@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Private Celebration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+    background: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 30px;
+}
+.hidden { display: none; }
+input, button {
+    padding: 12px;
+    font-size: 16px;
+    margin: 10px;
+    border-radius: 6px;
+    border: none;
+}
+button {
+    background: #ff4f9a;
+    color: white;
+}
+</style>
+</head>
+<body>
+
+<h2>🔒 Private Access</h2>
+<p>This celebration is locked.</p>
+
+<input type="password" id="password" placeholder="Enter secret password">
+<br>
+<button onclick="unlock()">Unlock</button>
+
+<div id="content" class="hidden"></div>
+
+<script>
+/* 🔐 SECURITY SETTINGS */
+const correctPassword = "31/12/2025";
+const unlockDate = "2025-12-31";
+
+/* 🔗 PRIVATE MEDIA LINKS (already converted) */
+const musicLink = "https://drive.google.com/uc?export=download&id=1clPQtzKe0EnJmTMAs51lBok1-VqcO0Xc";
+const videoLink = "https://drive.google.com/uc?export=download&id=16pp2QdRCDP1z7a1kegc4ydSFq3QqND_a";
+
+function unlock() {
+    const entered = document.getElementById("password").value;
+    const today = new Date().toISOString().split("T")[0];
+
+    if (entered !== correctPassword) {
+        alert("❌ Access denied");
+        return;
+    }
+
+    if (today < unlockDate) {
+        alert("⏳ Not today… come back on a special day ✨");
+        return;
+    }
+
+    document.body.innerHTML = `
+        <h1>✨ A Little Magic for Snigdha ✨</h1>
+        <p id="text"></p>
+
+        <audio autoplay loop>
+            <source src="${musicLink}" type="audio/mpeg">
+        </audio>
+
+        <video width="100%" controls autoplay>
+            <source src="${videoLink}" type="video/mp4">
+        </video>
+    `;
+
+    typeText();
+}
+
+function typeText() {
+    const message =
+`Hey Snigdha ❤️
+
+This moment was quietly waiting just for you…
+
+Someone wanted to make you smile today 🌸
+
+🎉 HAPPY BIRTHDAY 🎉
+
+This was made only for you ✨`;
+
+    let i = 0;
+    const p = document.getElementById("text");
+
+    const typing = setInterval(() => {
+        p.innerHTML += message.charAt(i);
+        i++;
+        if (i >= message.length) clearInterval(typing);
+    }, 50);
+}
+</script>
+
+</body>
+</html>
