@@ -2,100 +2,240 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Private Celebration</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Celebration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
 <style>
+* { box-sizing: border-box; }
+
 body {
-    background: #000;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 30px;
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    overflow: hidden;
+    text-align: center;
 }
-.hidden { display: none; }
-input, button {
-    padding: 12px;
-    font-size: 16px;
-    margin: 10px;
-    border-radius: 6px;
-    border: none;
+
+section {
+    display: none;
+    height: 100vh;
+    padding: 20px;
 }
+section.active { display: block; }
+
+input {
+    padding: 14px;
+    width: 240px;
+    border-radius: 30px;
+    border: none;
+    text-align: center;
+    margin: 6px;
+}
+
 button {
-    background: #ff4f9a;
-    color: white;
+    padding: 14px 34px;
+    border-radius: 30px;
+    border: none;
+    background: linear-gradient(135deg,#ff4f9a,#ff8ccf);
+    color: #fff;
+    font-size: 16px;
+    margin-top: 16px;
+}
+
+/* PASSWORD HINT */
+#hint {
+    opacity: 0;
+    font-size: 14px;
+    margin-top: 10px;
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0% { opacity: .2 }
+    50% { opacity: .7 }
+    100% { opacity: .2 }
+}
+
+/* IMAGE */
+.mainImage {
+    width: 90%;
+    max-width: 600px;
+    border-radius: 18px;
+    margin: 20px auto;
+}
+
+/* SCROLL TEXT */
+#scrollBox {
+    height: 240px;
+    overflow-y: scroll;
+    max-width: 720px;
+    margin: auto;
+    padding: 10px;
+}
+
+.line {
+    margin: 6px 0;
+    opacity: 0;
+    animation: fadeIn .6s forwards;
+}
+.signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: 26px;
+}
+
+/* PAGE 3 */
+#page3 {
+    background: url("./bg31.jpg") center/cover no-repeat;
+}
+.overlay {
+    background: rgba(0,0,0,.6);
+    padding: 20px;
+    border-radius: 16px;
+    max-width: 720px;
+    margin: auto;
+}
+
+/* CONFETTI */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    animation: fall 3s linear infinite;
+}
+@keyframes fall {
+    from { transform: translateY(-10vh); }
+    to { transform: translateY(110vh); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 </style>
 </head>
+
 <body>
 
-<h2>🔒 Private Access</h2>
-<p>This celebration is locked.</p>
+<audio id="bgm" src="music.mp3" loop></audio>
 
-<input type="password" id="password" placeholder="Enter secret password">
-<br>
-<button onclick="unlock()">Unlock</button>
+<!-- PAGE 1 -->
+<section id="page1" class="active">
+    <h2>🔒 Private Access</h2>
+    <input id="nameInput" placeholder="Your name"><br>
+    <input id="password" placeholder="Password"><br>
+    <button onclick="start()">Begin Experience 🎬</button>
+    <div id="hint">Hint: a special date 🤍</div>
+</section>
 
-<div id="content" class="hidden"></div>
+<!-- PAGE 2 -->
+<section id="page2">
+    <h1>✨ A Little Magic ✨</h1>
+    <img src="./main.jpg" class="mainImage">
+    <div id="scrollBox"></div>
+
+    <h3>💖 How did this feel?</h3>
+    <button onclick="saveReaction('Smile')">😍 Smile</button>
+    <button onclick="saveReaction('Emotional')">🥹 Emotional</button>
+    <button onclick="saveReaction('Loved it')">❤️ Loved it</button>
+</section>
+
+<!-- PAGE 3 -->
+<section id="page3">
+    <h1>🌟 Why 31st December Is Special</h1>
+    <div class="overlay">
+        <p>Endings create beginnings.</p>
+        <p>Some souls are born to renew hope.</p>
+        <button onclick="showPage(4)">One last thing →</button>
+    </div>
+</section>
+
+<!-- PAGE 4 -->
+<section id="page4">
+    <h1>🤍 One Quiet Truth</h1>
+    <p style="max-width:600px;margin:auto;">
+        Someone genuinely wishes you happiness.<br><br>
+        No expectations.<br>
+        Just care ✨
+    </p>
+</section>
 
 <script>
-/* 🔐 SECURITY SETTINGS */
-const correctPassword = "31/12/2025";
-const unlockDate = "2025-12-31";
+const PASSWORD = "28/12/2025";
+let attempts = 0;
+const music = document.getElementById("bgm");
 
-/* 🔗 PRIVATE MEDIA LINKS (already converted) */
-const musicLink = "https://drive.google.com/uc?export=download&id=1clPQtzKe0EnJmTMAs51lBok1-VqcO0Xc";
-const videoLink = "https://drive.google.com/uc?export=download&id=16pp2QdRCDP1z7a1kegc4ydSFq3QqND_a";
+function start() {
+    const pass = password.value;
+    const name = nameInput.value || "Snigdha";
 
-function unlock() {
-    const entered = document.getElementById("password").value;
-    const today = new Date().toISOString().split("T")[0];
+    if (pass !== PASSWORD) {
+        attempts++;
+        if (attempts >= 3) document.getElementById("hint").style.opacity = 1;
+        alert("Wrong password");
+        return;
+    }
 
-    if (entered !== correctPassword) {
-        alert("❌ Access denied");
-        return;
-    }
+    showPage(2);
+    music.volume = 0.4;
+    music.play();
 
-    if (today < unlockDate) {
-        alert("⏳ Not today… come back on a special day ✨");
-        return;
-    }
-
-    document.body.innerHTML = `
-        <h1>✨ A Little Magic for Snigdha ✨</h1>
-        <p id="text"></p>
-
-        <audio autoplay loop>
-            <source src="${musicLink}" type="audio/mpeg">
-        </audio>
-
-        <video width="100%" controls autoplay>
-            <source src="${videoLink}" type="video/mp4">
-        </video>
-    `;
-
-    typeText();
+    startMessage(name);
 }
 
-function typeText() {
-    const message =
-`Hey Snigdha ❤️
+function startMessage(name) {
+    const lines = [
+        `Hey ${name} ❤️`,
+        "This moment was quietly waiting just for you…",
+        "Someone wanted to make you smile today 🌸",
+        "🎉 HAPPY BIRTHDAY 🎉",
+        "This was made only for you ✨"
+    ];
 
-This moment was quietly waiting just for you…
+    const box = document.getElementById("scrollBox");
+    let i = 0;
 
-Someone wanted to make you smile today 🌸
+    const timer = setInterval(() => {
+        if (i >= lines.length) {
+            clearInterval(timer);
+            launchConfetti();
+            setTimeout(() => showPage(3), 2500);
+            return;
+        }
 
-🎉 HAPPY BIRTHDAY 🎉
+        const div = document.createElement("div");
+        div.className = "line";
+        if (i === 0) div.classList.add("signature");
+        div.textContent = lines[i];
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+        i++;
+    }, 900);
+}
 
-This was made only for you ✨`;
+/* ANALYTICS */
+function saveReaction(val) {
+    if (localStorage.getItem("reaction")) return;
+    localStorage.setItem("reaction", val);
+    alert("Reaction saved 🤍");
+}
 
-    let i = 0;
-    const p = document.getElementById("text");
+/* CONFETTI */
+function launchConfetti() {
+    for (let i = 0; i < 25; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.background = ["#ff4f9a","#ffd700","#8cf"][Math.floor(Math.random()*3)];
+        document.body.appendChild(c);
+        setTimeout(()=>c.remove(),3000);
+    }
+}
 
-    const typing = setInterval(() => {
-        p.innerHTML += message.charAt(i);
-        i++;
-        if (i >= message.length) clearInterval(typing);
-    }, 50);
+function showPage(n) {
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById("page" + n).classList.add("active");
 }
 </script>
 
