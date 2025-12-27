@@ -11,231 +11,223 @@
 * { box-sizing: border-box; }
 
 body {
-    margin: 0;
-    background: #000;
-    color: #fff;
-    font-family: 'Playfair Display', serif;
-    overflow: hidden;
-    text-align: center;
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  overflow: hidden;
+  text-align: center;
 }
 
+/* ---------- PARTICLES ---------- */
+.particle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,.25);
+  border-radius: 50%;
+  animation: float 12s linear infinite;
+}
+@keyframes float {
+  from { transform: translateY(110vh); }
+  to { transform: translateY(-10vh); }
+}
+
+/* ---------- SECTIONS ---------- */
 section {
-    display: none;
-    height: 100vh;
-    padding: 20px;
+  display: none;
+  height: 100vh;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
-section.active { display: block; }
+section.active {
+  display: block;
+  opacity: 1;
+}
 
+/* ---------- INPUT ---------- */
 input {
-    padding: 14px;
-    width: 240px;
-    border-radius: 30px;
-    border: none;
-    text-align: center;
-    margin: 6px;
+  padding: 14px;
+  width: 240px;
+  border-radius: 30px;
+  border: none;
+  text-align: center;
 }
-
 button {
-    padding: 14px 34px;
-    border-radius: 30px;
-    border: none;
-    background: linear-gradient(135deg,#ff4f9a,#ff8ccf);
-    color: #fff;
-    font-size: 16px;
-    margin-top: 16px;
+  padding: 14px 34px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg,#ff4f9a,#ff8ccf);
+  color: #fff;
+  margin-top: 16px;
+  font-size: 16px;
 }
 
-/* PASSWORD HINT */
-#hint {
-    opacity: 0;
-    font-size: 14px;
-    margin-top: 10px;
-    animation: pulse 1.5s infinite;
-}
-@keyframes pulse {
-    0% { opacity: .2 }
-    50% { opacity: .7 }
-    100% { opacity: .2 }
-}
-
-/* IMAGE */
+/* ---------- PAGE 2 ---------- */
 .mainImage {
-    width: 90%;
-    max-width: 600px;
-    border-radius: 18px;
-    margin: 20px auto;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 18px;
+  margin: 20px auto;
 }
 
-/* SCROLL TEXT */
 #scrollBox {
-    height: 240px;
-    overflow-y: scroll;
-    max-width: 720px;
-    margin: auto;
-    padding: 10px;
+  height: 260px;
+  overflow-y: auto;
+  max-width: 720px;
+  margin: auto;
+  padding: 10px;
 }
 
 .line {
-    margin: 6px 0;
-    opacity: 0;
-    animation: fadeIn .6s forwards;
-}
-.signature {
-    font-family: 'Dancing Script', cursive;
-    font-size: 26px;
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeIn .6s forwards;
 }
 
-/* PAGE 3 */
-#page3 {
-    background: url("./bg31.jpg") center/cover no-repeat;
-}
-.overlay {
-    background: rgba(0,0,0,.6);
-    padding: 20px;
-    border-radius: 16px;
-    max-width: 720px;
-    margin: auto;
+.heartbeat {
+  animation: beat 1.2s infinite;
+  color: #ff9acb;
+  font-weight: 700;
 }
 
-/* CONFETTI */
-.confetti {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    animation: fall 3s linear infinite;
-}
-@keyframes fall {
-    from { transform: translateY(-10vh); }
-    to { transform: translateY(110vh); }
+@keyframes beat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- PAGE 3 ---------- */
+#page3 {
+  background: url("./bg31.jpg") center/cover no-repeat;
+}
+.overlay {
+  background: rgba(0,0,0,.6);
+  padding: 24px;
+  border-radius: 16px;
+  max-width: 720px;
+  margin: auto;
+}
+
+/* ---------- SIGNATURE ---------- */
+.signature {
+  margin-top: 30px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  opacity: 0;
+  animation: reveal 2s forwards;
+  animation-delay: 2s;
+}
+@keyframes reveal {
+  to { opacity: 1; }
 }
 </style>
 </head>
 
 <body>
 
-<audio id="bgm" src="music.mp3" loop></audio>
+<!-- PARTICLES -->
+<script>
+for(let i=0;i<40;i++){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=8+Math.random()*10+"s";
+  document.body.appendChild(p);
+}
+</script>
 
 <!-- PAGE 1 -->
 <section id="page1" class="active">
-    <h2>🔒 Private Access</h2>
-    <input id="nameInput" placeholder="Your name"><br>
-    <input id="password" placeholder="Password"><br>
-    <button onclick="start()">Begin Experience 🎬</button>
-    <div id="hint">Hint: a special date 🤍</div>
+  <h2>🔒 Private Access</h2>
+  <p>This celebration is locked.</p>
+  <input id="password" placeholder="Enter password">
+  <br>
+  <button onclick="start()">Unlock</button>
 </section>
 
 <!-- PAGE 2 -->
 <section id="page2">
-    <h1>✨ A Little Magic ✨</h1>
-    <img src="./main.jpg" class="mainImage">
-    <div id="scrollBox"></div>
-
-    <h3>💖 How did this feel?</h3>
-    <button onclick="saveReaction('Smile')">😍 Smile</button>
-    <button onclick="saveReaction('Emotional')">🥹 Emotional</button>
-    <button onclick="saveReaction('Loved it')">❤️ Loved it</button>
+  <img src="./main.jpg" class="mainImage">
+  <div id="scrollBox"></div>
 </section>
 
 <!-- PAGE 3 -->
 <section id="page3">
+  <div class="overlay">
     <h1>🌟 Why 31st December Is Special</h1>
-    <div class="overlay">
-        <p>Endings create beginnings.</p>
-        <p>Some souls are born to renew hope.</p>
-        <button onclick="showPage(4)">One last thing →</button>
-    </div>
-</section>
-
-<!-- PAGE 4 -->
-<section id="page4">
-    <h1>🤍 One Quiet Truth</h1>
-    <p style="max-width:600px;margin:auto;">
-        Someone genuinely wishes you happiness.<br><br>
-        No expectations.<br>
-        Just care ✨
+    <p>
+      The final heartbeat of a year…<br>
+      A promise of new beginnings.<br><br>
+      Some souls are born to remind the world<br>
+      that endings are beautiful too.
     </p>
+    <div class="signature">— Made with care 🤍</div>
+  </div>
 </section>
 
 <script>
 const PASSWORD = "28/12/2025";
-let attempts = 0;
-const music = document.getElementById("bgm");
 
-function start() {
-    const pass = password.value;
-    const name = nameInput.value || "Snigdha";
+const LINES = [
+  "Hey Snigdha ❤️",
+  "",
+  "This moment was quietly waiting just for you…",
+  "",
+  "I know you may not know who I am,",
+  "but I know you as someone truly special to me.",
+  "",
+  "Someone I proudly call my friend 🤍",
+  "",
+  "Someone wanted to make you smile today 🌸",
+  "and remind you that you are appreciated more than you know.",
+  "",
+  "🎉 HAPPY BIRTHDAY 🎉",
+  "",
+  "Also, an advance Happy New Year ✨",
+  "",
+  "I couldn’t wish you on Instagram,",
+  "so I wanted to wish you in my own little way here.",
+  "",
+  "May this coming year bring you happiness,",
+  "peace, good health, and many beautiful moments.",
+  "",
+  "This was made only for you ✨"
+];
 
-    if (pass !== PASSWORD) {
-        attempts++;
-        if (attempts >= 3) document.getElementById("hint").style.opacity = 1;
-        alert("Wrong password");
-        return;
-    }
+let i = 0;
 
-    showPage(2);
-    music.volume = 0.4;
-    music.play();
-
-    startMessage(name);
+function goPage(n){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  setTimeout(()=>document.getElementById("page"+n).classList.add("active"),300);
 }
 
-function startMessage(name) {
-    const lines = [
-        `Hey ${name} ❤️`,
-        "This moment was quietly waiting just for you…",
-        "Someone wanted to make you smile today 🌸",
-        "🎉 HAPPY BIRTHDAY 🎉",
-        "This was made only for you ✨"
-    ];
-
-    const box = document.getElementById("scrollBox");
-    let i = 0;
-
-    const timer = setInterval(() => {
-        if (i >= lines.length) {
-            clearInterval(timer);
-            launchConfetti();
-            setTimeout(() => showPage(3), 2500);
-            return;
-        }
-
-        const div = document.createElement("div");
-        div.className = "line";
-        if (i === 0) div.classList.add("signature");
-        div.textContent = lines[i];
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
-        i++;
-    }, 900);
+function start(){
+  const val=document.getElementById("password").value.trim();
+  if(val!==PASSWORD){ alert("❌ Access denied"); return; }
+  goPage(2);
+  setTimeout(typeLines,800);
 }
 
-/* ANALYTICS */
-function saveReaction(val) {
-    if (localStorage.getItem("reaction")) return;
-    localStorage.setItem("reaction", val);
-    alert("Reaction saved 🤍");
-}
-
-/* CONFETTI */
-function launchConfetti() {
-    for (let i = 0; i < 25; i++) {
-        const c = document.createElement("div");
-        c.className = "confetti";
-        c.style.left = Math.random() * 100 + "vw";
-        c.style.background = ["#ff4f9a","#ffd700","#8cf"][Math.floor(Math.random()*3)];
-        document.body.appendChild(c);
-        setTimeout(()=>c.remove(),3000);
-    }
-}
-
-function showPage(n) {
-    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-    document.getElementById("page" + n).classList.add("active");
+function typeLines(){
+  const box=document.getElementById("scrollBox");
+  if(i>=LINES.length){
+    setTimeout(()=>goPage(3),2500);
+    return;
+  }
+  const d=document.createElement("div");
+  d.className="line";
+  d.innerText=LINES[i];
+  if(LINES[i].includes("HAPPY BIRTHDAY")) d.classList.add("heartbeat");
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+  i++;
+  setTimeout(typeLines,900);
 }
 </script>
 
