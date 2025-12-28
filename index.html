@@ -5,22 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
 <style>
 body{
   margin:0;
-  background:#000;
-  color:#fff;
   font-family:Arial, sans-serif;
+  color:#fff;
   text-align:center;
   overflow:hidden;
+  background:#000;
 }
 
 section{
   display:none;
   min-height:100vh;
   padding:20px;
+  background:url("bg31.jpg") center/cover no-repeat;
 }
+
 section.active{display:block}
+
+.overlay{
+  background:rgba(0,0,0,0.7);
+  padding:22px;
+  border-radius:16px;
+  max-width:700px;
+  margin:40px auto;
+}
 
 input{
   padding:12px;
@@ -28,7 +41,6 @@ input{
   border-radius:20px;
   border:none;
   text-align:center;
-  font-size:16px;
 }
 
 button{
@@ -42,58 +54,26 @@ button{
   cursor:pointer;
 }
 
-/* TITLE */
-#introTitle{
-  font-size:34px;
-  font-weight:bold;
-  background:linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
-  background-size:300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:colorFlow 4s linear infinite;
-}
-
-@keyframes colorFlow{
-  0%{background-position:0%}
-  100%{background-position:100%}
-}
-
-/* VIDEO */
 video{
   width:90%;
   max-width:600px;
   border-radius:16px;
 }
 
-/* TEXT */
+/* TEXT SCROLL */
 #scrollBox{
   max-width:600px;
-  margin:20px auto;
   height:260px;
+  margin:20px auto;
   overflow:hidden;
   text-align:left;
-  padding:0 16px;
+  padding:0 18px;
   font-size:15px;
   line-height:1.7;
 }
 
 .line{
   margin:10px 0;
-  opacity:0;
-  animation:fadeIn 1s forwards;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.overlay{
-  background:rgba(0,0,0,.7);
-  padding:22px;
-  border-radius:14px;
-  max-width:700px;
-  margin:auto;
 }
 </style>
 </head>
@@ -102,47 +82,40 @@ video{
 
 <!-- PAGE 1 -->
 <section id="page1" class="active">
-  <h1 id="introTitle">🎉 Birthday Surprise 🎉</h1>
-  <p>A little moment made with care 💖</p>
-  <input id="password" placeholder="Enter secret key">
-  <br>
-  <button onclick="unlock()">Open 🎁</button>
+  <div class="overlay">
+    <h2>🎉 Birthday Surprise 🎉</h2>
+    <p>A little moment made with care 💖</p>
+    <input id="password" placeholder="Enter secret key">
+    <br>
+    <button onclick="unlock()">Open 🎁</button>
+  </div>
 </section>
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <video id="video" autoplay muted loop playsinline>
-    <source src="video.mp4" type="video/mp4">
-  </video>
-  <br>
-  <button onclick="enableSound()">🔊 Tap to enable sound</button>
+  <div class="overlay">
+    <video id="video" autoplay muted loop playsinline>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <br>
+    <button onclick="enableSound()">🔊 Enable Sound</button>
 
-  <div id="scrollBox"></div>
+    <div id="scrollBox"></div>
 
-  <button id="toPage3" onclick="goPage(3)" style="display:none;">
-    Continue ✨
-  </button>
+    <button id="toPage3" onclick="goPage(3)" style="display:none;">Continue ✨</button>
+  </div>
 </section>
 
 <!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
-    <h2>🌟 Why December 31 Is So Special</h2>
+    <h2>🌟 Why December 31 Is Special</h2>
     <p>
-      December 31 isn’t just the end of a year.<br><br>
-
-      It’s the day when hearts feel heavier.<br>
-      When memories speak louder than words.<br><br>
-
-      It’s the day we think about people we couldn’t hold,
-      words we never said, and feelings we quietly kept inside.<br><br>
-
-      Some people are born on this day,
-      not to mark an ending,
-      but to remind us that even endings
-      can be full of love, warmth, and meaning 💖
+      December 31 is the final heartbeat of a year.<br><br>
+      A quiet pause between what was and what can be.<br><br>
+      Some people are born on this day to remind us<br>
+      that even endings can be beautiful 💖
     </p>
-
     <button onclick="goPage(4)">Continue 💫</button>
   </div>
 </section>
@@ -151,15 +124,20 @@ video{
 <section id="page4">
   <div class="overlay">
     <h2>💖 How did this feel?</h2>
-    <button onclick="saveReaction('Smile 😊')">😊 Smile</button>
-    <button onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
-    <button onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
-
+    <button onclick="sendReaction('Smile 😊')">😊 Smile</button>
+    <button onclick="sendReaction('Emotional 🥹')">🥹 Emotional</button>
+    <button onclick="sendReaction('Loved it ❤️')">❤️ Loved it</button>
     <div id="reactionResult" style="margin-top:20px;"></div>
   </div>
 </section>
 
 <script>
+/* EMAILJS INIT */
+emailjs.init("YOUR_PUBLIC_KEY");  // replace
+
+const SERVICE_ID = "YOUR_SERVICE_ID";   // replace
+const TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // replace
+
 const PASSWORD = "31/12/2025";
 
 const LINES = [
@@ -167,19 +145,14 @@ const LINES = [
   "",
   "This moment was quietly waiting just for you…",
   "",
-  "Some feelings don’t need names,",
-  "they just need a little space to exist.",
-  "",
-  "You matter more than you know.",
+  "You are appreciated more than you know.",
   "",
   "🎉 Happy Birthday 🎉",
   "",
-  "And a gentle welcome to a brand new year ✨",
-  "",
-  "This was made only for you 💖"
+  "And a gentle welcome to a brand new year ✨"
 ];
 
-let i = 0;
+let index = 0;
 
 function unlock(){
   if(document.getElementById("password").value.trim() !== PASSWORD){
@@ -187,7 +160,7 @@ function unlock(){
     return;
   }
   goPage(2);
-  showText();
+  autoScrollText();
 }
 
 function enableSound(){
@@ -201,25 +174,37 @@ function goPage(n){
   document.getElementById("page"+n).classList.add("active");
 }
 
-function showText(){
+function autoScrollText(){
   const box = document.getElementById("scrollBox");
-  if(i >= LINES.length){
+  if(index >= LINES.length){
     document.getElementById("toPage3").style.display = "inline-block";
     return;
   }
-  const d = document.createElement("div");
-  d.className = "line";
-  d.innerText = LINES[i];
-  box.appendChild(d);
-  box.scrollTop = box.scrollHeight;
-  i++;
-  setTimeout(showText, 1200);
+
+  const div = document.createElement("div");
+  div.className = "line";
+  div.innerText = LINES[index];
+  box.appendChild(div);
+
+  box.scrollTo({
+    top: box.scrollHeight,
+    behavior: "smooth"
+  });
+
+  index++;
+  setTimeout(autoScrollText, 1200);
 }
 
-function saveReaction(val){
-  localStorage.setItem("reaction", val);
-  document.getElementById("reactionResult").innerText =
-    "Saved reaction: " + val;
+function sendReaction(reaction){
+  const now = new Date();
+  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+    reaction,
+    date: now.toDateString(),
+    time: now.toLocaleTimeString()
+  }).then(()=>{
+    document.getElementById("reactionResult").innerText =
+      "Reaction sent successfully 💖";
+  });
 }
 </script>
 
