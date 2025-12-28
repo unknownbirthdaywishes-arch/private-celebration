@@ -19,32 +19,13 @@ body{
   text-align:center;
 }
 
-/* PARTICLES */
-.particle{
-  position:fixed;
-  width:5px;
-  height:5px;
-  background:rgba(255,255,255,.25);
-  border-radius:50%;
-  animation:float 14s linear infinite;
-}
-@keyframes float{
-  from{transform:translateY(110vh)}
-  to{transform:translateY(-10vh)}
-}
-
 /* SECTIONS */
 section{
   display:none;
   height:100vh;
   padding:20px;
-  opacity:0;
-  transition:opacity 1.5s ease;
 }
-section.active{
-  display:block;
-  opacity:1;
-}
+section.active{display:block}
 
 /* INPUT */
 input{
@@ -55,22 +36,23 @@ input{
   text-align:center;
 }
 button{
-  padding:14px 34px;
+  padding:14px 30px;
   border-radius:30px;
   border:none;
   background:linear-gradient(135deg,#ff4f9a,#ff8ccf);
   color:#fff;
   font-size:16px;
   margin-top:16px;
+  cursor:pointer;
 }
 
 /* VIDEO */
 video{
-  width:90%;
-  max-width:620px;
+  width:92%;
+  max-width:640px;
   border-radius:18px;
   margin:20px auto;
-  box-shadow:0 0 40px rgba(255,120,180,.35);
+  background:#000;
 }
 
 /* TEXT */
@@ -81,24 +63,21 @@ video{
   margin:auto;
   padding:10px;
 }
-
 .line{
-  margin:16px 0;
+  margin:14px 0;
   opacity:0;
-  animation:fadeSoft 2.2s forwards;
+  animation:fadeIn 2s forwards;
 }
-
-@keyframes fadeSoft{
-  from{opacity:0;transform:translateY(14px)}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
   to{opacity:1;transform:translateY(0)}
 }
 
 .heartbeat{
-  animation:beat 1.6s infinite;
+  animation:beat 1.4s infinite;
   color:#ff9acb;
   font-weight:600;
 }
-
 @keyframes beat{
   0%,100%{transform:scale(1)}
   50%{transform:scale(1.12)}
@@ -106,9 +85,8 @@ video{
 
 /* PAGE 3 */
 #page3{
-  background:url("./bg31.jpg") center/cover no-repeat;
+  background:url("bg31.jpg") center/cover no-repeat;
 }
-
 .overlay{
   background:rgba(0,0,0,.65);
   padding:24px;
@@ -117,65 +95,45 @@ video{
   margin:auto;
 }
 
-/* REACTION – GUARANTEED VISIBLE */
+/* REACTION */
 .reactionBox{
-  margin-top:40px;
-  padding:20px;
+  margin-top:30px;
+  padding-top:20px;
   border-top:1px solid rgba(255,255,255,.25);
 }
-
 .reactBtn{
-  margin:10px;
-  padding:12px 26px;
-  border-radius:26px;
-  border:none;
-  font-size:15px;
-  cursor:pointer;
+  margin:8px;
+  padding:12px 24px;
+  border-radius:24px;
   background:rgba(255,255,255,.18);
+  border:none;
   color:#fff;
+  cursor:pointer;
 }
-
-.reactBtn:hover{
-  background:rgba(255,255,255,.28);
+.reactBtn:disabled{
+  opacity:.5;
+  cursor:default;
 }
-
-.thanks{
-  margin-top:18px;
+#reactionSaved{
+  margin-top:16px;
   font-family:'Dancing Script',cursive;
   font-size:26px;
-  opacity:0;
-  animation:fadeSoft 2s forwards;
 }
 
 /* SIGNATURE */
 .signature{
-  margin-top:34px;
+  margin-top:30px;
   font-family:'Dancing Script',cursive;
   font-size:28px;
-  opacity:0;
-  animation:fadeSoft 2s forwards;
-  animation-delay:2s;
 }
 </style>
 </head>
 
 <body>
 
-<!-- PARTICLES -->
-<script>
-for(let i=0;i<40;i++){
-  const p=document.createElement("div");
-  p.className="particle";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDuration=10+Math.random()*10+"s";
-  document.body.appendChild(p);
-}
-</script>
-
 <!-- PAGE 1 -->
 <section id="page1" class="active">
   <h2>🔒 Private Access</h2>
-  <p>This celebration is locked.</p>
   <input id="password" placeholder="Enter password">
   <br>
   <button onclick="start()">Unlock</button>
@@ -183,8 +141,9 @@ for(let i=0;i<40;i++){
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <video id="vid" controls playsinline>
-    <source src="./video.mp4" type="video/mp4">
+  <video id="video" controls playsinline preload="metadata">
+    <source src="video.mp4" type="video/mp4">
+    Your browser does not support video.
   </video>
   <div id="scrollBox"></div>
 </section>
@@ -195,18 +154,18 @@ for(let i=0;i<40;i++){
     <h1>🌟 Why 31st December Is Special</h1>
     <p>
       The final heartbeat of a year.<br>
-      A quiet promise of new beginnings.<br><br>
+      A promise of new beginnings.<br><br>
       Some souls are born on this day<br>
       to remind the world that endings are beautiful too.
     </p>
 
-    <!-- REACTION (VISIBLE FOR SURE) -->
+    <!-- REACTION -->
     <div class="reactionBox">
       <h3>💖 How did this feel?</h3>
-      <button class="reactBtn" onclick="react('It made me smile 😊')">😊 Smile</button>
-      <button class="reactBtn" onclick="react('It touched my heart 🥹')">🥹 Emotional</button>
-      <button class="reactBtn" onclick="react('I loved it ❤️')">❤️ Loved it</button>
-      <div id="thanks"></div>
+      <button class="reactBtn" onclick="saveReaction('Smile 😊')">😊 Smile</button>
+      <button class="reactBtn" onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
+      <button class="reactBtn" onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
+      <div id="reactionSaved"></div>
     </div>
 
     <div class="signature">— Made with care 🤍</div>
@@ -242,43 +201,53 @@ const LINES=[
 "This was made only for you ✨"
 ];
 
-let idx=0;
-
-function goPage(n){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  setTimeout(()=>document.getElementById("page"+n).classList.add("active"),400);
-}
+let i=0;
 
 function start(){
-  const v=document.getElementById("password").value.trim();
-  if(v!==PASSWORD){alert("❌ Access denied");return;}
-  goPage(2);
-  document.getElementById("vid").play().catch(()=>{});
-  setTimeout(typeLines,1600);
+  if(document.getElementById("password").value.trim()!==PASSWORD){
+    alert("Wrong password");return;
+  }
+  document.getElementById("page1").classList.remove("active");
+  document.getElementById("page2").classList.add("active");
+
+  // user gesture → video allowed
+  document.getElementById("video").play().catch(()=>{});
+
+  setTimeout(typeLines,1500);
 }
 
 function typeLines(){
   const box=document.getElementById("scrollBox");
-  if(idx>=LINES.length){
-    setTimeout(()=>goPage(3),4000);
+  if(i>=LINES.length){
+    setTimeout(()=>{
+      document.getElementById("page2").classList.remove("active");
+      document.getElementById("page3").classList.add("active");
+      loadSavedReaction();
+    },4000);
     return;
   }
   const d=document.createElement("div");
   d.className="line";
-  d.innerText=LINES[idx];
-  if(LINES[idx].includes("HAPPY BIRTHDAY")) d.classList.add("heartbeat");
+  d.innerText=LINES[i];
+  if(LINES[i].includes("HAPPY BIRTHDAY")) d.classList.add("heartbeat");
   box.appendChild(d);
   box.scrollTop=box.scrollHeight;
-  idx++;
-  setTimeout(typeLines,1800); // VERY SLOW
+  i++;
+  setTimeout(typeLines,1800);
 }
 
-function react(val){
-  if(localStorage.getItem("reaction")) return;
+function saveReaction(val){
   localStorage.setItem("reaction",val);
-  const t=document.getElementById("thanks");
-  t.className="thanks";
-  t.innerText="💌 Thank you for sharing this feeling.";
+  loadSavedReaction();
+}
+
+function loadSavedReaction(){
+  const saved=localStorage.getItem("reaction");
+  if(saved){
+    document.querySelectorAll(".reactBtn").forEach(b=>b.disabled=true);
+    document.getElementById("reactionSaved").innerText=
+      "💌 You felt: "+saved;
+  }
 }
 </script>
 
