@@ -1,240 +1,233 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Birthday Surprise</title>
+<title>Private Celebration</title>
 
-<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  color:#fff;
-  overflow:hidden;
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  overflow: hidden;
+  text-align: center;
 }
 
-/* 🔥 FIREWORKS BEHIND CONTENT */
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:1;
-  pointer-events:none;
+/* ---------- PARTICLES ---------- */
+.particle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: rgba(255,255,255,.25);
+  border-radius: 50%;
+  animation: float 12s linear infinite;
+}
+@keyframes float {
+  from { transform: translateY(110vh); }
+  to { transform: translateY(-10vh); }
 }
 
-/* SECTIONS */
-section{
-  display:none;
-  min-height:100vh;
-  padding:20px;
-  background-size:cover;
-  background-position:center;
-  position:relative;
-  z-index:5; /* ABOVE CANVAS */
+/* ---------- SECTIONS ---------- */
+section {
+  display: none;
+  height: 100vh;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 1s ease;
 }
-section.active{display:block}
-
-#page1{background:#000}
-#page2,#page3,#page4{
-  background:url("bg.jpg") center/cover no-repeat;
+section.active {
+  display: block;
+  opacity: 1;
 }
 
-/* INPUT & BUTTON */
-input{
-  padding:12px;
-  width:240px;
-  border-radius:20px;
-  border:none;
-  text-align:center;
+/* ---------- INPUT ---------- */
+input {
+  padding: 14px;
+  width: 240px;
+  border-radius: 30px;
+  border: none;
+  text-align: center;
+}
+button {
+  padding: 14px 34px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg,#ff4f9a,#ff8ccf);
+  color: #fff;
+  margin-top: 16px;
+  font-size: 16px;
 }
 
-button{
-  padding:12px 26px;
-  border-radius:22px;
-  border:none;
-  background:#ff5fa2;
-  color:#fff;
-  font-size:16px;
-  margin:15px;
+/* ---------- PAGE 2 ---------- */
+.mainImage {
+  width: 90%;
+  max-width: 600px;
+  border-radius: 18px;
+  margin: 20px auto;
 }
 
-/* 💬 TEXT BOX FIX */
-#scrollBox{
-  max-width:600px;
-  margin:25px auto;
-  height:260px;
-  overflow-y:auto;
-  padding:18px;
-  background:rgba(0,0,0,0.65); /* 🔥 FIX */
-  border-radius:16px;
-  text-align:left;
-  font-size:16px;
-  line-height:1.8;
-  scroll-behavior:smooth;
+#scrollBox {
+  height: 260px;
+  overflow-y: auto;
+  max-width: 720px;
+  margin: auto;
+  padding: 10px;
 }
 
-.line{
-  opacity:0;
-  margin:10px 0;
-  animation:fadeIn 1s forwards;
+.line {
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeIn .6s forwards;
 }
 
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
+.heartbeat {
+  animation: beat 1.2s infinite;
+  color: #ff9acb;
+  font-weight: 700;
 }
 
-.overlay{
-  background:rgba(0,0,0,0.6);
-  padding:28px;
-  border-radius:18px;
-  max-width:720px;
-  margin:auto;
+@keyframes beat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
-video{
-  width:100%;
-  max-width:720px;
-  border-radius:16px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- PAGE 3 ---------- */
+#page3 {
+  background: url("./bg31.jpg") center/cover no-repeat;
+}
+.overlay {
+  background: rgba(0,0,0,.6);
+  padding: 24px;
+  border-radius: 16px;
+  max-width: 720px;
+  margin: auto;
+}
+
+/* ---------- SIGNATURE ---------- */
+.signature {
+  margin-top: 30px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 28px;
+  opacity: 0;
+  animation: reveal 2s forwards;
+  animation-delay: 2s;
+}
+@keyframes reveal {
+  to { opacity: 1; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎆 FIREWORKS -->
-<canvas id="fireworks"></canvas>
-
-<!-- 🎵 MUSIC -->
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
+<!-- PARTICLES -->
+<script>
+for(let i=0;i<40;i++){
+  const p=document.createElement("div");
+  p.className="particle";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=8+Math.random()*10+"s";
+  document.body.appendChild(p);
+}
+</script>
 
 <!-- PAGE 1 -->
-<section id="page1" class="active" style="text-align:center">
-  <h2>🎉 Birthday Surprise 🎉</h2>
-  <p>A little moment made with care 💖</p>
-  <input id="password" placeholder="Enter secret key">
+<section id="page1" class="active">
+  <h2>🔒 Private Access</h2>
+  <p>This celebration is locked.</p>
+  <input id="password" placeholder="Enter password">
   <br>
-  <button onclick="unlock()">Open 🎁</button>
+  <button onclick="start()">Unlock</button>
 </section>
 
 <!-- PAGE 2 -->
-<section id="page2" style="text-align:center">
-  <video id="video" autoplay muted loop playsinline>
-    <source src="video.mp4" type="video/mp4">
-  </video>
-
-  <br>
-  <button onclick="enableSound()">🔊 Enable Sound</button>
-
+<section id="page2">
+  <img src="./main.jpg" class="mainImage">
   <div id="scrollBox"></div>
-
-  <button id="toPage3" onclick="goPage(3)" style="display:none">
-    Continue ✨
-  </button>
 </section>
 
 <!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
-    <h2>🌟 December 31</h2>
+    <h1>🌟 Why 31st December Is Special</h1>
     <p>
-      Some people are born on this day<br>
-      to remind us that endings<br>
-      can still be beautiful 💖
+      The final heartbeat of a year…<br>
+      A promise of new beginnings.<br><br>
+      Some souls are born to remind the world<br>
+      that endings are beautiful too.
     </p>
-    <button onclick="goPage(4)">Continue 💫</button>
-  </div>
-</section>
-
-<!-- PAGE 4 -->
-<section id="page4">
-  <div class="overlay">
-    <h2>💖 How did this feel?</h2>
-    <button onclick="sendReaction('Smile 😊')">😊 Smile</button>
-    <button onclick="sendReaction('Emotional 🥹')">🥹 Emotional</button>
-    <button onclick="sendReaction('Loved it ❤️')">❤️ Loved it</button>
-    <div id="reactionResult" style="margin-top:20px"></div>
+    <div class="signature">— Made with care 🤍</div>
   </div>
 </section>
 
 <script>
-const PASSWORD="31/12/2025";
+const PASSWORD = "28/12/2025";
 
-const LINES=[
+const LINES = [
   "Hey Snigdha ❤️",
   "",
-  "This moment was waiting just for you…",
+  "This moment was quietly waiting just for you…",
   "",
-  "🎉 Happy Birthday 🎉",
+  "I know you may not know who I am,",
+  "but I know you as someone truly special to me.",
   "",
-  "And a soft welcome to a new year ✨",
+  "Someone I proudly call my friend 🤍",
   "",
-  "I’m sorry for wishing like this…",
-  "Some feelings needed more courage than words.",
-  "I hope this moment still made you smile 💖"
+  "Someone wanted to make you smile today 🌸",
+  "and remind you that you are appreciated more than you know.",
+  "",
+  "🎉 HAPPY BIRTHDAY 🎉",
+  "",
+  "Also, an advance Happy New Year ✨",
+  "",
+  "I couldn’t wish you on Instagram,",
+  "so I wanted to wish you in my own little way here.",
+  "",
+  "May this coming year bring you happiness,",
+  "peace, good health, and many beautiful moments.",
+  "",
+  "This was made only for you ✨"
 ];
 
-let i=0;
-
-function unlock(){
-  if(password.value!==PASSWORD){
-    alert("Wrong password ❌");
-    return;
-  }
-  bgMusic.play();
-  startFireworks();
-  goPage(2);
-  showText();
-}
-
-function enableSound(){
-  video.muted=false;
-  video.play();
-}
+let i = 0;
 
 function goPage(n){
   document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  document.getElementById("page"+n).classList.add("active");
+  setTimeout(()=>document.getElementById("page"+n).classList.add("active"),300);
 }
 
-function showText(){
+function start(){
+  const val=document.getElementById("password").value.trim();
+  if(val!==PASSWORD){ alert("❌ Access denied"); return; }
+  goPage(2);
+  setTimeout(typeLines,800);
+}
+
+function typeLines(){
   const box=document.getElementById("scrollBox");
   if(i>=LINES.length){
-    toPage3.style.display="inline-block";
+    setTimeout(()=>goPage(3),2500);
     return;
   }
   const d=document.createElement("div");
   d.className="line";
   d.innerText=LINES[i];
+  if(LINES[i].includes("HAPPY BIRTHDAY")) d.classList.add("heartbeat");
   box.appendChild(d);
   box.scrollTop=box.scrollHeight;
   i++;
-  setTimeout(showText,1200);
-}
-
-/* 🎆 SIMPLE FIREWORKS */
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-function startFireworks(){
-  setInterval(()=>{
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<20;i++){
-      ctx.beginPath();
-      ctx.arc(
-        Math.random()*canvas.width,
-        Math.random()*canvas.height/2,
-        2,0,Math.PI*2
-      );
-      ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`;
-      ctx.fill();
-    }
-  },700);
+  setTimeout(typeLines,900);
 }
 </script>
 
