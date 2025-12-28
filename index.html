@@ -1,233 +1,225 @@
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private Celebration</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<title>Birthday Surprise</title>
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: #000;
-  color: #fff;
-  font-family: 'Playfair Display', serif;
-  overflow: hidden;
-  text-align: center;
+body{
+  margin:0;
+  background:#000;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  text-align:center;
+  overflow:hidden;
 }
 
-/* ---------- PARTICLES ---------- */
-.particle {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: rgba(255,255,255,.25);
-  border-radius: 50%;
-  animation: float 12s linear infinite;
+section{
+  display:none;
+  min-height:100vh;
+  padding:20px;
 }
-@keyframes float {
-  from { transform: translateY(110vh); }
-  to { transform: translateY(-10vh); }
+section.active{display:block}
+
+input{
+  padding:12px;
+  width:240px;
+  border-radius:20px;
+  border:none;
+  text-align:center;
+  font-size:16px;
 }
 
-/* ---------- SECTIONS ---------- */
-section {
-  display: none;
-  height: 100vh;
-  padding: 20px;
-  opacity: 0;
-  transition: opacity 1s ease;
-}
-section.active {
-  display: block;
-  opacity: 1;
+button{
+  padding:12px 26px;
+  border-radius:22px;
+  border:none;
+  background:#ff5fa2;
+  color:#fff;
+  font-size:16px;
+  margin:15px;
+  cursor:pointer;
 }
 
-/* ---------- INPUT ---------- */
-input {
-  padding: 14px;
-  width: 240px;
-  border-radius: 30px;
-  border: none;
-  text-align: center;
-}
-button {
-  padding: 14px 34px;
-  border-radius: 30px;
-  border: none;
-  background: linear-gradient(135deg,#ff4f9a,#ff8ccf);
-  color: #fff;
-  margin-top: 16px;
-  font-size: 16px;
+/* TITLE */
+#introTitle{
+  font-size:34px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:colorFlow 4s linear infinite;
 }
 
-/* ---------- PAGE 2 ---------- */
-.mainImage {
-  width: 90%;
-  max-width: 600px;
-  border-radius: 18px;
-  margin: 20px auto;
+@keyframes colorFlow{
+  0%{background-position:0%}
+  100%{background-position:100%}
 }
 
-#scrollBox {
-  height: 260px;
-  overflow-y: auto;
-  max-width: 720px;
-  margin: auto;
-  padding: 10px;
+/* VIDEO */
+video{
+  width:90%;
+  max-width:600px;
+  border-radius:16px;
 }
 
-.line {
-  margin: 10px 0;
-  opacity: 0;
-  animation: fadeIn .6s forwards;
+/* TEXT */
+#scrollBox{
+  max-width:600px;
+  margin:20px auto;
+  height:260px;
+  overflow:hidden;
+  text-align:left;
+  padding:0 16px;
+  font-size:15px;
+  line-height:1.7;
 }
 
-.heartbeat {
-  animation: beat 1.2s infinite;
-  color: #ff9acb;
-  font-weight: 700;
+.line{
+  margin:10px 0;
+  opacity:0;
+  animation:fadeIn 1s forwards;
 }
 
-@keyframes beat {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ---------- PAGE 3 ---------- */
-#page3 {
-  background: url("./bg31.jpg") center/cover no-repeat;
-}
-.overlay {
-  background: rgba(0,0,0,.6);
-  padding: 24px;
-  border-radius: 16px;
-  max-width: 720px;
-  margin: auto;
-}
-
-/* ---------- SIGNATURE ---------- */
-.signature {
-  margin-top: 30px;
-  font-family: 'Dancing Script', cursive;
-  font-size: 28px;
-  opacity: 0;
-  animation: reveal 2s forwards;
-  animation-delay: 2s;
-}
-@keyframes reveal {
-  to { opacity: 1; }
+.overlay{
+  background:rgba(0,0,0,.7);
+  padding:22px;
+  border-radius:14px;
+  max-width:700px;
+  margin:auto;
 }
 </style>
 </head>
 
 <body>
 
-<!-- PARTICLES -->
-<script>
-for(let i=0;i<40;i++){
-  const p=document.createElement("div");
-  p.className="particle";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDuration=8+Math.random()*10+"s";
-  document.body.appendChild(p);
-}
-</script>
-
 <!-- PAGE 1 -->
 <section id="page1" class="active">
-  <h2>🔒 Private Access</h2>
-  <p>This celebration is locked.</p>
-  <input id="password" placeholder="Enter password">
+  <h1 id="introTitle">🎉 Birthday Surprise 🎉</h1>
+  <p>A little moment made with care 💖</p>
+  <input id="password" placeholder="Enter secret key">
   <br>
-  <button onclick="start()">Unlock</button>
+  <button onclick="unlock()">Open 🎁</button>
 </section>
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <img src="./main.jpg" class="mainImage">
+  <video id="video" autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <br>
+  <button onclick="enableSound()">🔊 Tap to enable sound</button>
+
   <div id="scrollBox"></div>
+
+  <button id="toPage3" onclick="goPage(3)" style="display:none;">
+    Continue ✨
+  </button>
 </section>
 
 <!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
-    <h1>🌟 Why 31st December Is Special</h1>
+    <h2>🌟 Why December 31 Is So Special</h2>
     <p>
-      The final heartbeat of a year…<br>
-      A promise of new beginnings.<br><br>
-      Some souls are born to remind the world<br>
-      that endings are beautiful too.
+      December 31 isn’t just the end of a year.<br><br>
+
+      It’s the day when hearts feel heavier.<br>
+      When memories speak louder than words.<br><br>
+
+      It’s the day we think about people we couldn’t hold,
+      words we never said, and feelings we quietly kept inside.<br><br>
+
+      Some people are born on this day,
+      not to mark an ending,
+      but to remind us that even endings
+      can be full of love, warmth, and meaning 💖
     </p>
-    <div class="signature">— Made with care 🤍</div>
+
+    <button onclick="goPage(4)">Continue 💫</button>
+  </div>
+</section>
+
+<!-- PAGE 4 -->
+<section id="page4">
+  <div class="overlay">
+    <h2>💖 How did this feel?</h2>
+    <button onclick="saveReaction('Smile 😊')">😊 Smile</button>
+    <button onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
+    <button onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
+
+    <div id="reactionResult" style="margin-top:20px;"></div>
   </div>
 </section>
 
 <script>
-const PASSWORD = "28/12/2025";
+const PASSWORD = "31/12/2025";
 
 const LINES = [
   "Hey Snigdha ❤️",
   "",
   "This moment was quietly waiting just for you…",
   "",
-  "I know you may not know who I am,",
-  "but I know you as someone truly special to me.",
+  "Some feelings don’t need names,",
+  "they just need a little space to exist.",
   "",
-  "Someone I proudly call my friend 🤍",
+  "You matter more than you know.",
   "",
-  "Someone wanted to make you smile today 🌸",
-  "and remind you that you are appreciated more than you know.",
+  "🎉 Happy Birthday 🎉",
   "",
-  "🎉 HAPPY BIRTHDAY 🎉",
+  "And a gentle welcome to a brand new year ✨",
   "",
-  "Also, an advance Happy New Year ✨",
-  "",
-  "I couldn’t wish you on Instagram,",
-  "so I wanted to wish you in my own little way here.",
-  "",
-  "May this coming year bring you happiness,",
-  "peace, good health, and many beautiful moments.",
-  "",
-  "This was made only for you ✨"
+  "This was made only for you 💖"
 ];
 
 let i = 0;
 
-function goPage(n){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
-  setTimeout(()=>document.getElementById("page"+n).classList.add("active"),300);
-}
-
-function start(){
-  const val=document.getElementById("password").value.trim();
-  if(val!==PASSWORD){ alert("❌ Access denied"); return; }
-  goPage(2);
-  setTimeout(typeLines,800);
-}
-
-function typeLines(){
-  const box=document.getElementById("scrollBox");
-  if(i>=LINES.length){
-    setTimeout(()=>goPage(3),2500);
+function unlock(){
+  if(document.getElementById("password").value.trim() !== PASSWORD){
+    alert("Wrong password ❌");
     return;
   }
-  const d=document.createElement("div");
-  d.className="line";
-  d.innerText=LINES[i];
-  if(LINES[i].includes("HAPPY BIRTHDAY")) d.classList.add("heartbeat");
+  goPage(2);
+  showText();
+}
+
+function enableSound(){
+  const v = document.getElementById("video");
+  v.muted = false;
+  v.play();
+}
+
+function goPage(n){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+}
+
+function showText(){
+  const box = document.getElementById("scrollBox");
+  if(i >= LINES.length){
+    document.getElementById("toPage3").style.display = "inline-block";
+    return;
+  }
+  const d = document.createElement("div");
+  d.className = "line";
+  d.innerText = LINES[i];
   box.appendChild(d);
-  box.scrollTop=box.scrollHeight;
+  box.scrollTop = box.scrollHeight;
   i++;
-  setTimeout(typeLines,900);
+  setTimeout(showText, 1200);
+}
+
+function saveReaction(val){
+  localStorage.setItem("reaction", val);
+  document.getElementById("reactionResult").innerText =
+    "Saved reaction: " + val;
 }
 </script>
 
