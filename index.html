@@ -5,126 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Private Celebration</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
-
 <style>
-*{box-sizing:border-box}
-
 body{
   margin:0;
   background:#000;
   color:#fff;
-  font-family:'Playfair Display',serif;
-  overflow:hidden;
+  font-family:Arial, sans-serif;
   text-align:center;
 }
 
-/* SECTIONS */
 section{
   display:none;
-  height:100vh;
+  min-height:100vh;
   padding:20px;
 }
-section.active{display:block}
 
-/* INPUT */
+section.active{
+  display:block;
+}
+
 input{
-  padding:14px;
-  width:240px;
-  border-radius:30px;
+  padding:12px;
+  width:220px;
+  border-radius:20px;
   border:none;
   text-align:center;
 }
+
 button{
-  padding:14px 30px;
-  border-radius:30px;
+  padding:12px 26px;
+  border-radius:22px;
   border:none;
-  background:linear-gradient(135deg,#ff4f9a,#ff8ccf);
+  background:#ff5fa2;
   color:#fff;
   font-size:16px;
-  margin-top:16px;
+  margin:10px;
   cursor:pointer;
 }
 
-/* VIDEO */
 video{
-  width:92%;
-  max-width:640px;
-  border-radius:18px;
+  width:90%;
+  max-width:600px;
   margin:20px auto;
   background:#000;
 }
 
-/* TEXT */
 #scrollBox{
-  height:260px;
-  overflow-y:auto;
-  max-width:720px;
-  margin:auto;
-  padding:10px;
+  max-width:700px;
+  margin:20px auto;
+  text-align:left;
 }
+
 .line{
-  margin:14px 0;
-  opacity:0;
-  animation:fadeIn 2s forwards;
-}
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
+  margin:10px 0;
 }
 
-.heartbeat{
-  animation:beat 1.4s infinite;
-  color:#ff9acb;
-  font-weight:600;
-}
-@keyframes beat{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.12)}
-}
-
-/* PAGE 3 */
 #page3{
   background:url("bg31.jpg") center/cover no-repeat;
 }
+
 .overlay{
-  background:rgba(0,0,0,.65);
-  padding:24px;
-  border-radius:16px;
-  max-width:760px;
+  background:rgba(0,0,0,.7);
+  padding:20px;
+  border-radius:12px;
+  max-width:700px;
   margin:auto;
 }
 
-/* REACTION */
-.reactionBox{
-  margin-top:30px;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.25);
-}
-.reactBtn{
-  margin:8px;
-  padding:12px 24px;
-  border-radius:24px;
-  background:rgba(255,255,255,.18);
-  border:none;
-  color:#fff;
-  cursor:pointer;
-}
-.reactBtn:disabled{
-  opacity:.5;
-  cursor:default;
-}
-#reactionSaved{
-  margin-top:16px;
-  font-family:'Dancing Script',cursive;
-  font-size:26px;
-}
-
-/* SIGNATURE */
-.signature{
-  margin-top:30px;
-  font-family:'Dancing Script',cursive;
-  font-size:28px;
+#reactionResult{
+  margin-top:20px;
+  font-size:18px;
+  color:#ffd6e8;
 }
 </style>
 </head>
@@ -136,119 +87,111 @@ video{
   <h2>🔒 Private Access</h2>
   <input id="password" placeholder="Enter password">
   <br>
-  <button onclick="start()">Unlock</button>
+  <button onclick="unlock()">Unlock</button>
 </section>
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <video id="video" controls playsinline preload="metadata">
+  <video controls playsinline>
     <source src="video.mp4" type="video/mp4">
     Your browser does not support video.
   </video>
+
   <div id="scrollBox"></div>
+
+  <button onclick="goPage(3)">Continue</button>
 </section>
 
 <!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
-    <h1>🌟 Why 31st December Is Special</h1>
+    <h2>🌟 Why 31st December Is Special</h2>
     <p>
       The final heartbeat of a year.<br>
       A promise of new beginnings.<br><br>
       Some souls are born on this day<br>
-      to remind the world that endings are beautiful too.
+      to remind the world that endings are beautiful.
     </p>
 
-    <!-- REACTION -->
-    <div class="reactionBox">
-      <h3>💖 How did this feel?</h3>
-      <button class="reactBtn" onclick="saveReaction('Smile 😊')">😊 Smile</button>
-      <button class="reactBtn" onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
-      <button class="reactBtn" onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
-      <div id="reactionSaved"></div>
-    </div>
+    <h3>💖 How did this feel?</h3>
+    <button onclick="saveReaction('Smile 😊')">😊 Smile</button>
+    <button onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
+    <button onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
 
-    <div class="signature">— Made with care 🤍</div>
+    <div id="reactionResult"></div>
   </div>
 </section>
 
 <script>
-const PASSWORD="28/12/2025";
+const PASSWORD = "28/12/2025";
 
-const LINES=[
-"Hey Snigdha ❤️",
-"",
-"This moment was quietly waiting just for you…",
-"",
-"I know you may not know who I am,",
-"but I know you as someone truly special to me.",
-"",
-"Someone I proudly call my friend 🤍",
-"",
-"Someone wanted to make you smile today 🌸",
-"and remind you that you are appreciated more than you know.",
-"",
-"🎉 HAPPY BIRTHDAY 🎉",
-"",
-"Also, an advance Happy New Year ✨",
-"",
-"I couldn’t wish you on Instagram,",
-"so I wanted to wish you in my own little way here.",
-"",
-"May this coming year bring you happiness,",
-"peace, good health, and many beautiful moments.",
-"",
-"This was made only for you ✨"
+const LINES = [
+  "Hey Snigdha ❤️",
+  "This moment was quietly waiting just for you…",
+  "I know you may not know who I am,",
+  "but I know you as someone truly special to me.",
+  "Someone I proudly call my friend 🤍",
+  "",
+  "Someone wanted to make you smile today 🌸",
+  "and remind you that you are appreciated more than you know.",
+  "",
+  "🎉 HAPPY BIRTHDAY 🎉",
+  "",
+  "Also, an advance Happy New Year ✨",
+  "I couldn’t wish you on Instagram,",
+  "so I wanted to wish you in my own little way here.",
+  "",
+  "May this coming year bring you happiness,",
+  "peace, good health, and beautiful moments.",
+  "",
+  "This was made only for you ✨"
 ];
 
-let i=0;
+let lineIndex = 0;
 
-function start(){
-  if(document.getElementById("password").value.trim()!==PASSWORD){
-    alert("Wrong password");return;
+function unlock(){
+  if(document.getElementById("password").value.trim() !== PASSWORD){
+    alert("Wrong password");
+    return;
   }
-  document.getElementById("page1").classList.remove("active");
-  document.getElementById("page2").classList.add("active");
+  goPage(2);
+  typeLines();
+}
 
-  // user gesture → video allowed
-  document.getElementById("video").play().catch(()=>{});
-
-  setTimeout(typeLines,1500);
+function goPage(n){
+  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("page"+n).classList.add("active");
+  loadReaction();
 }
 
 function typeLines(){
-  const box=document.getElementById("scrollBox");
-  if(i>=LINES.length){
-    setTimeout(()=>{
-      document.getElementById("page2").classList.remove("active");
-      document.getElementById("page3").classList.add("active");
-      loadSavedReaction();
-    },4000);
-    return;
-  }
-  const d=document.createElement("div");
-  d.className="line";
-  d.innerText=LINES[i];
-  if(LINES[i].includes("HAPPY BIRTHDAY")) d.classList.add("heartbeat");
-  box.appendChild(d);
-  box.scrollTop=box.scrollHeight;
-  i++;
-  setTimeout(typeLines,1800);
+  const box = document.getElementById("scrollBox");
+  if(lineIndex >= LINES.length) return;
+
+  const div = document.createElement("div");
+  div.className = "line";
+  div.innerText = LINES[lineIndex];
+  box.appendChild(div);
+
+  lineIndex++;
+  setTimeout(typeLines, 900);
 }
 
 function saveReaction(val){
-  localStorage.setItem("reaction",val);
-  loadSavedReaction();
+  localStorage.setItem("reaction", val);
+  loadReaction();
 }
 
-function loadSavedReaction(){
-  const saved=localStorage.getItem("reaction");
-  if(saved){
-    document.querySelectorAll(".reactBtn").forEach(b=>b.disabled=true);
-    document.getElementById("reactionSaved").innerText=
-      "💌 You felt: "+saved;
+function loadReaction(){
+  const r = localStorage.getItem("reaction");
+  if(r){
+    document.getElementById("reactionResult").innerText =
+      "Saved reaction: " + r;
   }
 }
+
+// show saved reaction on reload
+loadReaction();
 </script>
 
 </body>
