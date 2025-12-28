@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Private Celebration</title>
+<title>Birthday Surprise</title>
 
 <style>
 body{
@@ -12,6 +12,7 @@ body{
   color:#fff;
   font-family:Arial, sans-serif;
   text-align:center;
+  overflow:hidden;
 }
 
 section{
@@ -19,10 +20,7 @@ section{
   min-height:100vh;
   padding:20px;
 }
-
-section.active{
-  display:block;
-}
+section.active{display:block}
 
 input{
   padding:12px;
@@ -43,23 +41,60 @@ button{
   cursor:pointer;
 }
 
+/* 🎉 BIRTHDAY INTRO */
+#introTitle{
+  font-size:34px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
+  background-size:300%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:colorFlow 4s linear infinite;
+}
+
+@keyframes colorFlow{
+  0%{background-position:0%}
+  100%{background-position:100%}
+}
+
+.glow{
+  animation:glow 2s ease-in-out infinite;
+}
+@keyframes glow{
+  0%,100%{text-shadow:0 0 10px #ff8ccf}
+  50%{text-shadow:0 0 30px #ffd86f}
+}
+
+/* VIDEO */
 video{
   width:90%;
   max-width:600px;
   margin:20px auto;
   background:#000;
+  border-radius:16px;
 }
 
+/* TEXT AREA */
 #scrollBox{
   max-width:700px;
   margin:20px auto;
+  height:260px;
+  overflow:hidden; /* auto only */
   text-align:left;
 }
 
 .line{
-  margin:10px 0;
+  margin:12px 0;
+  opacity:0;
+  animation:fadeIn 1.8s forwards;
 }
 
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* PAGE 3 */
 #page3{
   background:url("bg31.jpg") center/cover no-repeat;
 }
@@ -72,6 +107,7 @@ video{
   margin:auto;
 }
 
+/* REACTION */
 #reactionResult{
   margin-top:20px;
   font-size:18px;
@@ -82,24 +118,24 @@ video{
 
 <body>
 
-<!-- PAGE 1 -->
+<!-- PAGE 1 – Birthday Surprise -->
 <section id="page1" class="active">
-  <h2>🔒 Private Access</h2>
-  <input id="password" placeholder="Enter password">
+  <h1 id="introTitle" class="glow">🎉 Birthday Surprise 🎉</h1>
+  <p>A little moment made with care 💖</p>
+  <input id="password" placeholder="Enter secret key">
   <br>
-  <button onclick="unlock()">Unlock</button>
+  <button onclick="unlock()">Open 🎁</button>
 </section>
 
 <!-- PAGE 2 -->
 <section id="page2">
   <video controls playsinline>
     <source src="video.mp4" type="video/mp4">
-    Your browser does not support video.
   </video>
 
   <div id="scrollBox"></div>
 
-  <button onclick="goPage(3)">Continue</button>
+  <button onclick="goPage(3)">Continue ✨</button>
 </section>
 
 <!-- PAGE 3 -->
@@ -127,9 +163,12 @@ const PASSWORD = "28/12/2025";
 
 const LINES = [
   "Hey Snigdha ❤️",
+  "",
   "This moment was quietly waiting just for you…",
+  "",
   "I know you may not know who I am,",
   "but I know you as someone truly special to me.",
+  "",
   "Someone I proudly call my friend 🤍",
   "",
   "Someone wanted to make you smile today 🌸",
@@ -138,6 +177,7 @@ const LINES = [
   "🎉 HAPPY BIRTHDAY 🎉",
   "",
   "Also, an advance Happy New Year ✨",
+  "",
   "I couldn’t wish you on Instagram,",
   "so I wanted to wish you in my own little way here.",
   "",
@@ -173,8 +213,11 @@ function typeLines(){
   div.innerText = LINES[lineIndex];
   box.appendChild(div);
 
+  // ✅ AUTO SCROLL UP FIX
+  box.scrollTop = box.scrollHeight;
+
   lineIndex++;
-  setTimeout(typeLines, 900);
+  setTimeout(typeLines, 1200);
 }
 
 function saveReaction(val){
@@ -190,7 +233,6 @@ function loadReaction(){
   }
 }
 
-// show saved reaction on reload
 loadReaction();
 </script>
 
