@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
-<!-- EMAILJS -->
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 
 <style>
@@ -15,25 +14,33 @@ body{
   color:#fff;
   text-align:center;
   overflow:hidden;
-  background:#000;
+}
+
+/* FIREWORKS */
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:0;
 }
 
 section{
   display:none;
   min-height:100vh;
   padding:20px;
-  background:url("bg31.jpg") center/cover no-repeat;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  position:relative;
+  z-index:1;
 }
-
 section.active{display:block}
 
-.overlay{
-  background:rgba(0,0,0,0.7);
-  padding:22px;
-  border-radius:16px;
-  max-width:700px;
-  margin:40px auto;
-}
+#page1{background:#000}
+#page2,#page3,#page4{background:url("bg.jpg")}
 
 input{
   padding:12px;
@@ -54,67 +61,81 @@ button{
   cursor:pointer;
 }
 
-video{
-  width:90%;
-  max-width:600px;
-  border-radius:16px;
-}
-
-/* TEXT SCROLL */
 #scrollBox{
   max-width:600px;
-  height:260px;
   margin:20px auto;
-  overflow:hidden;
+  height:260px;
+  overflow-y:auto;
   text-align:left;
-  padding:0 18px;
+  padding:0 16px;
   font-size:15px;
   line-height:1.7;
+  scroll-behavior:smooth;
 }
 
 .line{
   margin:10px 0;
+  opacity:0;
+  animation:fadeIn 1s forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.overlay{
+  background:rgba(0,0,0,.6);
+  padding:26px;
+  border-radius:16px;
+  max-width:720px;
+  margin:auto;
+}
+
+video{
+  width:100%;
+  max-width:720px;
+  border-radius:16px;
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="fireworks"></canvas>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <!-- PAGE 1 -->
 <section id="page1" class="active">
-  <div class="overlay">
-    <h2>🎉 Birthday Surprise 🎉</h2>
-    <p>A little moment made with care 💖</p>
-    <input id="password" placeholder="Enter secret key">
-    <br>
-    <button onclick="unlock()">Open 🎁</button>
-  </div>
+  <h2>🎉 Birthday Surprise 🎉</h2>
+  <p>A little moment made with care 💖</p>
+  <input id="password" placeholder="Enter secret key">
+  <br>
+  <button onclick="unlock()">Open 🎁</button>
 </section>
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <div class="overlay">
-    <video id="video" autoplay muted loop playsinline>
-      <source src="video.mp4" type="video/mp4">
-    </video>
-    <br>
-    <button onclick="enableSound()">🔊 Enable Sound</button>
+  <video id="video" autoplay muted loop playsinline>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+  <br>
+  <button onclick="enableSound()">🔊 Enable Sound</button>
 
-    <div id="scrollBox"></div>
-
-    <button id="toPage3" onclick="goPage(3)" style="display:none;">Continue ✨</button>
-  </div>
+  <div id="scrollBox"></div>
+  <button id="toPage3" onclick="goPage(3)" style="display:none;">Continue ✨</button>
 </section>
 
 <!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
-    <h2>🌟 Why December 31 Is Special</h2>
+    <h2>🌟 December 31</h2>
     <p>
-      December 31 is the final heartbeat of a year.<br><br>
-      A quiet pause between what was and what can be.<br><br>
       Some people are born on this day to remind us<br>
-      that even endings can be beautiful 💖
+      that endings can still be beautiful 💖
     </p>
     <button onclick="goPage(4)">Continue 💫</button>
   </div>
@@ -132,40 +153,44 @@ video{
 </section>
 
 <script>
-/* EMAILJS INIT */
-emailjs.init("YOUR_PUBLIC_KEY");  // replace
+const PASSWORD="31/12/2025";
 
-const SERVICE_ID = "YOUR_SERVICE_ID";   // replace
-const TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // replace
+(function(){
+  emailjs.init("YOUR_PUBLIC_KEY");
+})();
+const SERVICE_ID="YOUR_SERVICE_ID";
+const TEMPLATE_ID="YOUR_TEMPLATE_ID";
 
-const PASSWORD = "31/12/2025";
-
-const LINES = [
+const LINES=[
   "Hey Snigdha ❤️",
   "",
-  "This moment was quietly waiting just for you…",
-  "",
-  "You are appreciated more than you know.",
+  "This moment was waiting just for you…",
   "",
   "🎉 Happy Birthday 🎉",
   "",
-  "And a gentle welcome to a brand new year ✨"
+  "And a soft welcome to a new year ✨",
+  "",
+  "I’m sorry for wishing like this…",
+  "Some feelings needed more courage than words.",
+  "I hope this moment still made you smile 💖"
 ];
 
-let index = 0;
+let i=0;
 
 function unlock(){
-  if(document.getElementById("password").value.trim() !== PASSWORD){
+  if(document.getElementById("password").value.trim()!==PASSWORD){
     alert("Wrong password ❌");
     return;
   }
+  document.getElementById("bgMusic").play();
+  startFireworks();
   goPage(2);
-  autoScrollText();
+  showText();
 }
 
 function enableSound(){
-  const v = document.getElementById("video");
-  v.muted = false;
+  const v=document.getElementById("video");
+  v.muted=false;
   v.play();
 }
 
@@ -174,37 +199,50 @@ function goPage(n){
   document.getElementById("page"+n).classList.add("active");
 }
 
-function autoScrollText(){
-  const box = document.getElementById("scrollBox");
-  if(index >= LINES.length){
-    document.getElementById("toPage3").style.display = "inline-block";
+function showText(){
+  const box=document.getElementById("scrollBox");
+  if(i>=LINES.length){
+    document.getElementById("toPage3").style.display="inline-block";
     return;
   }
-
-  const div = document.createElement("div");
-  div.className = "line";
-  div.innerText = LINES[index];
-  box.appendChild(div);
-
-  box.scrollTo({
-    top: box.scrollHeight,
-    behavior: "smooth"
-  });
-
-  index++;
-  setTimeout(autoScrollText, 1200);
+  const d=document.createElement("div");
+  d.className="line";
+  d.innerText=LINES[i];
+  box.appendChild(d);
+  box.scrollTop=box.scrollHeight;
+  i++;
+  setTimeout(showText,1200);
 }
 
 function sendReaction(reaction){
-  const now = new Date();
-  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+  const now=new Date();
+  emailjs.send(SERVICE_ID,TEMPLATE_ID,{
     reaction,
-    date: now.toDateString(),
-    time: now.toLocaleTimeString()
+    date:now.toDateString(),
+    time:now.toLocaleTimeString()
   }).then(()=>{
-    document.getElementById("reactionResult").innerText =
-      "Reaction sent successfully 💖";
+    document.getElementById("reactionResult").innerText=
+      "Thank you for sharing how you felt 💖";
   });
+}
+
+/* FIREWORKS */
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+function startFireworks(){
+  setInterval(()=>{
+    const x=Math.random()*canvas.width;
+    const y=Math.random()*canvas.height/2;
+    for(let i=0;i<30;i++){
+      ctx.beginPath();
+      ctx.arc(x,y,2,0,Math.PI*2);
+      ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`;
+      ctx.fill();
+    }
+  },600);
 }
 </script>
 
