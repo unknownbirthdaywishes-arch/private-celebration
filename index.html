@@ -41,9 +41,9 @@ button{
   cursor:pointer;
 }
 
-/* 🎉 BIRTHDAY INTRO */
+/* 🎉 INTRO */
 #introTitle{
-  font-size:34px;
+  font-size:36px;
   font-weight:bold;
   background:linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
   background-size:300%;
@@ -70,23 +70,22 @@ video{
   width:90%;
   max-width:600px;
   margin:20px auto;
-  background:#000;
   border-radius:16px;
 }
 
-/* TEXT AREA */
+/* MESSAGE BOX */
 #scrollBox{
   max-width:700px;
   margin:20px auto;
   height:260px;
-  overflow:hidden; /* auto only */
+  overflow:hidden;
   text-align:left;
 }
 
 .line{
   margin:12px 0;
   opacity:0;
-  animation:fadeIn 1.8s forwards;
+  animation:fadeIn 1.5s forwards;
 }
 
 @keyframes fadeIn{
@@ -102,7 +101,7 @@ video{
 .overlay{
   background:rgba(0,0,0,.7);
   padding:20px;
-  border-radius:12px;
+  border-radius:14px;
   max-width:700px;
   margin:auto;
 }
@@ -118,10 +117,10 @@ video{
 
 <body>
 
-<!-- PAGE 1 – Birthday Surprise -->
+<!-- PAGE 1 -->
 <section id="page1" class="active">
   <h1 id="introTitle" class="glow">🎉 Birthday Surprise 🎉</h1>
-  <p>A little moment made with care 💖</p>
+  <p>Something made just for you 💖</p>
   <input id="password" placeholder="Enter secret key">
   <br>
   <button onclick="unlock()">Open 🎁</button>
@@ -129,7 +128,8 @@ video{
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <video controls playsinline>
+  <!-- 🔥 AUTOPLAY + LOOP + MUTED -->
+  <video id="bdayVideo" autoplay muted loop playsinline>
     <source src="video.mp4" type="video/mp4">
   </video>
 
@@ -159,7 +159,7 @@ video{
 </section>
 
 <script>
-const PASSWORD = "28/12/2025";
+const PASSWORD = "31/12/2025";
 
 const LINES = [
   "Hey Snigdha ❤️",
@@ -191,11 +191,15 @@ let lineIndex = 0;
 
 function unlock(){
   if(document.getElementById("password").value.trim() !== PASSWORD){
-    alert("Wrong password");
+    alert("Wrong password ❌");
     return;
   }
   goPage(2);
   typeLines();
+
+  // ▶️ ensure autoplay starts
+  const v = document.getElementById("bdayVideo");
+  v.play().catch(()=>{});
 }
 
 function goPage(n){
@@ -213,7 +217,6 @@ function typeLines(){
   div.innerText = LINES[lineIndex];
   box.appendChild(div);
 
-  // ✅ AUTO SCROLL UP FIX
   box.scrollTop = box.scrollHeight;
 
   lineIndex++;
@@ -232,8 +235,6 @@ function loadReaction(){
       "Saved reaction: " + r;
   }
 }
-
-loadReaction();
 </script>
 
 </body>
