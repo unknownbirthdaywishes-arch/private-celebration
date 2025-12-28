@@ -38,11 +38,11 @@ button{
   background:#ff5fa2;
   color:#fff;
   font-size:16px;
-  margin:20px;
+  margin:15px;
   cursor:pointer;
 }
 
-/* INTRO */
+/* TITLE */
 #introTitle{
   font-size:34px;
   font-weight:bold;
@@ -58,23 +58,14 @@ button{
   100%{background-position:100%}
 }
 
-.glow{
-  animation:glow 2s ease-in-out infinite;
-}
-@keyframes glow{
-  0%,100%{text-shadow:0 0 10px #ff8ccf}
-  50%{text-shadow:0 0 30px #ffd86f}
-}
-
 /* VIDEO */
 video{
   width:90%;
   max-width:600px;
-  margin:20px auto;
   border-radius:16px;
 }
 
-/* TEXT BOX */
+/* TEXT */
 #scrollBox{
   max-width:600px;
   margin:20px auto;
@@ -83,13 +74,13 @@ video{
   text-align:left;
   padding:0 16px;
   font-size:15px;
-  line-height:1.6;
+  line-height:1.7;
 }
 
 .line{
   margin:10px 0;
   opacity:0;
-  animation:fadeIn 1.2s forwards;
+  animation:fadeIn 1s forwards;
 }
 
 @keyframes fadeIn{
@@ -97,23 +88,12 @@ video{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* PAGE 3 */
-#page3{
-  background:url("bg31.jpg") center/cover no-repeat;
-}
-
 .overlay{
   background:rgba(0,0,0,.7);
-  padding:20px;
+  padding:22px;
   border-radius:14px;
   max-width:700px;
   margin:auto;
-}
-
-#reactionResult{
-  margin-top:20px;
-  font-size:18px;
-  color:#ffd6e8;
 }
 </style>
 </head>
@@ -122,7 +102,7 @@ video{
 
 <!-- PAGE 1 -->
 <section id="page1" class="active">
-  <h1 id="introTitle" class="glow">🎉 Birthday Surprise 🎉</h1>
+  <h1 id="introTitle">🎉 Birthday Surprise 🎉</h1>
   <p>A little moment made with care 💖</p>
   <input id="password" placeholder="Enter secret key">
   <br>
@@ -131,13 +111,15 @@ video{
 
 <!-- PAGE 2 -->
 <section id="page2">
-  <video id="bdayVideo" autoplay loop playsinline controls>
+  <video id="video" autoplay muted loop playsinline>
     <source src="video.mp4" type="video/mp4">
   </video>
+  <br>
+  <button onclick="enableSound()">🔊 Tap to enable sound</button>
 
   <div id="scrollBox"></div>
 
-  <button id="continueBtn" onclick="goPage(3)" style="display:none;">
+  <button id="toPage3" onclick="goPage(3)" style="display:none;">
     Continue ✨
   </button>
 </section>
@@ -145,20 +127,35 @@ video{
 <!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
-    <h2>🌟 Why 31st December Is Special</h2>
+    <h2>🌟 Why December 31 Is So Special</h2>
     <p>
-      The final heartbeat of a year.<br>
-      A promise of new beginnings.<br><br>
-      Some souls are born on this day<br>
-      to remind the world that endings are beautiful.
+      December 31 isn’t just the end of a year.<br><br>
+
+      It’s the day when hearts feel heavier.<br>
+      When memories speak louder than words.<br><br>
+
+      It’s the day we think about people we couldn’t hold,
+      words we never said, and feelings we quietly kept inside.<br><br>
+
+      Some people are born on this day,
+      not to mark an ending,
+      but to remind us that even endings
+      can be full of love, warmth, and meaning 💖
     </p>
 
-    <h3>💖 How did this feel?</h3>
+    <button onclick="goPage(4)">Continue 💫</button>
+  </div>
+</section>
+
+<!-- PAGE 4 -->
+<section id="page4">
+  <div class="overlay">
+    <h2>💖 How did this feel?</h2>
     <button onclick="saveReaction('Smile 😊')">😊 Smile</button>
     <button onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
     <button onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
 
-    <div id="reactionResult"></div>
+    <div id="reactionResult" style="margin-top:20px;"></div>
   </div>
 </section>
 
@@ -170,42 +167,33 @@ const LINES = [
   "",
   "This moment was quietly waiting just for you…",
   "",
-  "I know you may not know who I am,",
-  "but I know you as someone truly special to me.",
+  "Some feelings don’t need names,",
+  "they just need a little space to exist.",
   "",
-  "Someone I proudly call my friend 🤍",
+  "You matter more than you know.",
   "",
-  "Someone wanted to make you smile today 🌸",
-  "and remind you that you are appreciated more than you know.",
+  "🎉 Happy Birthday 🎉",
   "",
-  "🎉 HAPPY BIRTHDAY 🎉",
+  "And a gentle welcome to a brand new year ✨",
   "",
-  "Also, an advance Happy New Year ✨",
-  "",
-  "I couldn’t wish you on Instagram,",
-  "so I wanted to wish you in my own little way here.",
-  "",
-  "May this coming year bring you happiness,",
-  "peace, good health, and beautiful moments.",
-  "",
-  "This was made only for you ✨"
+  "This was made only for you 💖"
 ];
 
-let index = 0;
+let i = 0;
 
 function unlock(){
-  const entered = document.getElementById("password").value.trim();
-  if(entered !== PASSWORD){
+  if(document.getElementById("password").value.trim() !== PASSWORD){
     alert("Wrong password ❌");
     return;
   }
-
   goPage(2);
-  typeText();
+  showText();
+}
 
-  const v = document.getElementById("bdayVideo");
+function enableSound(){
+  const v = document.getElementById("video");
   v.muted = false;
-  v.play().catch(()=>{});
+  v.play();
 }
 
 function goPage(n){
@@ -213,23 +201,19 @@ function goPage(n){
   document.getElementById("page"+n).classList.add("active");
 }
 
-function typeText(){
+function showText(){
   const box = document.getElementById("scrollBox");
-
-  if(index >= LINES.length){
-    document.getElementById("continueBtn").style.display = "inline-block";
+  if(i >= LINES.length){
+    document.getElementById("toPage3").style.display = "inline-block";
     return;
   }
-
-  const div = document.createElement("div");
-  div.className = "line";
-  div.innerText = LINES[index];
-  box.appendChild(div);
-
+  const d = document.createElement("div");
+  d.className = "line";
+  d.innerText = LINES[i];
+  box.appendChild(d);
   box.scrollTop = box.scrollHeight;
-
-  index++;
-  setTimeout(typeText, 1100);
+  i++;
+  setTimeout(showText, 1200);
 }
 
 function saveReaction(val){
