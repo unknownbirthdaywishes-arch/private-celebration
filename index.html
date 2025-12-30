@@ -6,116 +6,128 @@
 <title>Birthday Surprise</title>
 
 <style>
-body{
-  margin:0;
-  background:#000;
-  color:#fff;
-  font-family:Arial, sans-serif;
-  text-align:center;
-  overflow:hidden;
+body {
+  margin: 0;
+  /* FIX: Added background image properties */
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+              url('YOUR_IMAGE_URL_HERE.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow-x: hidden;
 }
 
-section{
-  display:none;
-  min-height:100vh;
-  padding:20px;
+section {
+  display: none;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
 }
-section.active{display:block}
+section.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-input{
-  padding:12px;
-  width:240px;
-  border-radius:20px;
-  border:none;
-  text-align:center;
-  font-size:16px;
-}
-
-button{
-  padding:12px 26px;
-  border-radius:22px;
-  border:none;
-  background:#ff5fa2;
-  color:#fff;
-  font-size:16px;
-  margin:15px;
-  cursor:pointer;
+input {
+  padding: 12px;
+  width: 240px;
+  border-radius: 20px;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
-/* TITLE */
-#introTitle{
-  font-size:34px;
-  font-weight:bold;
-  background:linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
-  background-size:300%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:colorFlow 4s linear infinite;
+button {
+  padding: 12px 26px;
+  border-radius: 22px;
+  border: none;
+  background: #ff5fa2;
+  color: #fff;
+  font-size: 16px;
+  margin: 15px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-@keyframes colorFlow{
+button:hover { transform: scale(1.05); }
+
+#introTitle {
+  font-size: 34px;
+  font-weight: bold;
+  background: linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
+  background-size: 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: colorFlow 4s linear infinite;
+}
+
+@keyframes colorFlow {
   0%{background-position:0%}
   100%{background-position:100%}
 }
 
-/* VIDEO */
-video{
-  width:90%;
-  max-width:600px;
-  border-radius:16px;
+video {
+  width: 90%;
+  max-width: 400px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-/* TEXT */
-#scrollBox{
-  max-width:600px;
-  margin:20px auto;
-  height:260px;
-  overflow:hidden;
-  text-align:left;
-  padding:0 16px;
-  font-size:15px;
-  line-height:1.7;
+/* FIX: Improved ScrollBox Container */
+#scrollBox {
+  max-width: 500px;
+  width: 90%;
+  margin: 20px auto;
+  height: 200px; /* Fixed height to force scrolling */
+  overflow-y: auto; 
+  text-align: center;
+  padding: 10px;
+  font-size: 18px;
+  line-height: 1.8;
+  scrollbar-width: none; /* Hide scrollbar for Chrome/Safari */
+}
+#scrollBox::-webkit-scrollbar { display: none; }
+
+.line {
+  margin: 15px 0;
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+  min-height: 25px;
 }
 
-.line{
-  margin:10px 0;
-  opacity:0;
-  animation:fadeIn 1s forwards;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-.overlay{
-  background:rgba(0,0,0,.7);
-  padding:22px;
-  border-radius:14px;
-  max-width:700px;
-  margin:auto;
+.overlay {
+  background: rgba(0, 0, 0, 0.75);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: auto;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 </style>
 </head>
 
 <body>
 
-<!-- PAGE 1 -->
 <section id="page1" class="active">
-  <h1 id="introTitle">🎉 Birthday Surprise 🎉</h1>
-  <p>A little moment made with care 💖</p>
-  <input id="password" placeholder="Enter secret key">
-  <br>
-  <button onclick="unlock()">Open 🎁</button>
+  <div class="overlay">
+    <h1 id="introTitle">🎉 Birthday Surprise 🎉</h1>
+    <p>A little moment made with care 💖</p>
+    <input id="password" type="text" placeholder="Enter secret key">
+    <br>
+    <button onclick="unlock()">Open 🎁</button>
+  </div>
 </section>
 
-<!-- PAGE 2 -->
 <section id="page2">
-  <video id="video" autoplay muted loop playsinline>
+  <video id="video" loop playsinline>
     <source src="video.mp4" type="video/mp4">
   </video>
   <br>
-  <button onclick="enableSound()">🔊 Tap to enable sound</button>
+  <button onclick="enableSound()">🔊 Tap to Play & Enable Sound</button>
 
   <div id="scrollBox"></div>
 
@@ -124,38 +136,31 @@ video{
   </button>
 </section>
 
-<!-- PAGE 3 -->
 <section id="page3">
   <div class="overlay">
     <h2>🌟 Why December 31 Is So Special</h2>
     <p>
       December 31 isn’t just the end of a year.<br><br>
-
       It’s the day when hearts feel heavier.<br>
       When memories speak louder than words.<br><br>
-
       It’s the day we think about people we couldn’t hold,
       words we never said, and feelings we quietly kept inside.<br><br>
-
       Some people are born on this day,
       not to mark an ending,
       but to remind us that even endings
       can be full of love, warmth, and meaning 💖
     </p>
-
     <button onclick="goPage(4)">Continue 💫</button>
   </div>
 </section>
 
-<!-- PAGE 4 -->
 <section id="page4">
   <div class="overlay">
     <h2>💖 How did this feel?</h2>
     <button onclick="saveReaction('Smile 😊')">😊 Smile</button>
     <button onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
     <button onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
-
-    <div id="reactionResult" style="margin-top:20px;"></div>
+    <div id="reactionResult" style="margin-top:20px; font-weight: bold; color: #ff5fa2;"></div>
   </div>
 </section>
 
@@ -164,18 +169,12 @@ const PASSWORD = "31/12/2025";
 
 const LINES = [
   "Hey Snigdha ❤️",
-  "",
   "This moment was quietly waiting just for you…",
-  "",
   "Some feelings don’t need names,",
   "they just need a little space to exist.",
-  "",
   "You matter more than you know.",
-  "",
   "🎉 Happy Birthday 🎉",
-  "",
   "And a gentle welcome to a brand new year ✨",
-  "",
   "This was made only for you 💖"
 ];
 
@@ -187,7 +186,8 @@ function unlock(){
     return;
   }
   goPage(2);
-  showText();
+  // Give a tiny delay before starting text
+  setTimeout(showText, 1000);
 }
 
 function enableSound(){
@@ -203,23 +203,27 @@ function goPage(n){
 
 function showText(){
   const box = document.getElementById("scrollBox");
+  
   if(i >= LINES.length){
     document.getElementById("toPage3").style.display = "inline-block";
     return;
   }
+
   const d = document.createElement("div");
   d.className = "line";
   d.innerText = LINES[i];
   box.appendChild(d);
-  box.scrollTop = box.scrollHeight;
+  
+  // FIX: Smooth auto-scrolling to the new line
+  d.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
   i++;
-  setTimeout(showText, 1200);
+  setTimeout(showText, 2000); // 2 seconds between lines for readability
 }
 
 function saveReaction(val){
   localStorage.setItem("reaction", val);
-  document.getElementById("reactionResult").innerText =
-    "Saved reaction: " + val;
+  document.getElementById("reactionResult").innerText = "Saved reaction: " + val;
 }
 </script>
 
