@@ -5,15 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Birthday Surprise</title>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
+/* BACKGROUND FIXED */
 body {
   margin: 0;
-  /* FIX: Added background image properties */
+  /* Specifically linking to your file bg31.jpg */
   background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-              url('YOUR_IMAGE_URL_HERE.jpg') no-repeat center center fixed;
+              url('bg31.jpg') no-repeat center center fixed;
   background-size: cover;
+  background-color: #000; 
   color: #fff;
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   text-align: center;
   overflow-x: hidden;
 }
@@ -24,34 +28,60 @@ section {
   padding: 20px;
   box-sizing: border-box;
 }
-section.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+section.active { 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+/* UI Elements */
+.overlay {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 600px;
+  width: 85%;
+  margin: auto;
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+}
 
 input {
-  padding: 12px;
+  padding: 14px;
   width: 240px;
-  border-radius: 20px;
-  border: none;
+  border-radius: 30px;
+  border: 2px solid #ff5fa2;
   text-align: center;
   font-size: 16px;
   margin-bottom: 10px;
+  outline: none;
+  background: rgba(255,255,255,0.9);
 }
 
 button {
-  padding: 12px 26px;
-  border-radius: 22px;
+  padding: 12px 28px;
+  border-radius: 25px;
   border: none;
   background: #ff5fa2;
   color: #fff;
   font-size: 16px;
+  font-weight: bold;
   margin: 15px;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);
 }
 
-button:hover { transform: scale(1.05); }
+button:hover { 
+  transform: scale(1.05);
+  background: #ff3b8a;
+  box-shadow: 0 6px 20px rgba(255, 95, 162, 0.5);
+}
 
 #introTitle {
-  font-size: 34px;
+  font-size: 38px;
   font-weight: bold;
   background: linear-gradient(90deg,#ff4f9a,#ffd86f,#7afcff,#c77dff);
   background-size: 300%;
@@ -69,43 +99,32 @@ video {
   width: 90%;
   max-width: 400px;
   border-radius: 16px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  border: 3px solid rgba(255,255,255,0.2);
 }
 
-/* FIX: Improved ScrollBox Container */
+/* SCROLLING TEXT FIXED */
 #scrollBox {
   max-width: 500px;
   width: 90%;
   margin: 20px auto;
-  height: 200px; /* Fixed height to force scrolling */
+  height: 220px; 
   overflow-y: auto; 
-  text-align: center;
   padding: 10px;
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1.8;
-  scrollbar-width: none; /* Hide scrollbar for Chrome/Safari */
+  scrollbar-width: none; 
 }
 #scrollBox::-webkit-scrollbar { display: none; }
 
 .line {
-  margin: 15px 0;
+  margin: 18px 0;
   opacity: 0;
-  animation: fadeIn 1s forwards;
-  min-height: 25px;
+  animation: fadeIn 1.2s forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.overlay {
-  background: rgba(0, 0, 0, 0.75);
-  padding: 30px;
-  border-radius: 20px;
-  max-width: 600px;
-  margin: auto;
-  border: 1px solid rgba(255,255,255,0.1);
 }
 </style>
 </head>
@@ -127,7 +146,7 @@ video {
     <source src="video.mp4" type="video/mp4">
   </video>
   <br>
-  <button onclick="enableSound()">🔊 Tap to Play & Enable Sound</button>
+  <button onclick="enableSound()">🔊 Tap for Sound & Play</button>
 
   <div id="scrollBox"></div>
 
@@ -139,10 +158,9 @@ video {
 <section id="page3">
   <div class="overlay">
     <h2>🌟 Why December 31 Is So Special</h2>
-    <p>
+    <p style="text-align: left;">
       December 31 isn’t just the end of a year.<br><br>
-      It’s the day when hearts feel heavier.<br>
-      When memories speak louder than words.<br><br>
+      It’s the day when hearts feel heavier. When memories speak louder than words.<br><br>
       It’s the day we think about people we couldn’t hold,
       words we never said, and feelings we quietly kept inside.<br><br>
       Some people are born on this day,
@@ -166,7 +184,6 @@ video {
 
 <script>
 const PASSWORD = "31/12/2025";
-
 const LINES = [
   "Hey Snigdha ❤️",
   "This moment was quietly waiting just for you…",
@@ -178,16 +195,28 @@ const LINES = [
   "This was made only for you 💖"
 ];
 
-let i = 0;
+let lineIndex = 0;
 
 function unlock(){
-  if(document.getElementById("password").value.trim() !== PASSWORD){
+  const input = document.getElementById("password").value.trim();
+  if(input !== PASSWORD){
     alert("Wrong password ❌");
     return;
   }
-  goPage(2);
-  // Give a tiny delay before starting text
-  setTimeout(showText, 1000);
+  
+  // Confetti Burst!
+  confetti({
+    particleCount: 150,
+    spread: 70,
+    origin: { y: 0.6 },
+    colors: ['#ff5fa2', '#ffd86f', '#7afcff']
+  });
+
+  // Delay page transition slightly to see confetti
+  setTimeout(() => {
+    goPage(2);
+    setTimeout(showText, 1000);
+  }, 500);
 }
 
 function enableSound(){
@@ -197,33 +226,36 @@ function enableSound(){
 }
 
 function goPage(n){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
   document.getElementById("page"+n).classList.add("active");
 }
 
 function showText(){
   const box = document.getElementById("scrollBox");
   
-  if(i >= LINES.length){
+  if(lineIndex >= LINES.length){
     document.getElementById("toPage3").style.display = "inline-block";
     return;
   }
 
-  const d = document.createElement("div");
-  d.className = "line";
-  d.innerText = LINES[i];
-  box.appendChild(d);
+  const lineDiv = document.createElement("div");
+  lineDiv.className = "line";
+  lineDiv.innerText = LINES[lineIndex];
+  box.appendChild(lineDiv);
   
-  // FIX: Smooth auto-scrolling to the new line
-  d.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  // Auto-scroll logic
+  lineDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-  i++;
-  setTimeout(showText, 2000); // 2 seconds between lines for readability
+  lineIndex++;
+  setTimeout(showText, 2500); 
 }
 
 function saveReaction(val){
   localStorage.setItem("reaction", val);
   document.getElementById("reactionResult").innerText = "Saved reaction: " + val;
+  
+  // Final small confetti pop
+  confetti({ particleCount: 40, spread: 50 });
 }
 </script>
 
