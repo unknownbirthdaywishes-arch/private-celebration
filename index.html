@@ -8,14 +8,13 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-/* BACKGROUND FIXED */
+/* BACKGROUND */
 body {
   margin: 0;
-  /* Specifically linking to your file bg31.jpg */
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-              url('bg31.jpg') no-repeat center center fixed;
+  background:
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('bg31.jpg') no-repeat center center fixed;
   background-size: cover;
-  background-color: #000; 
   color: #fff;
   font-family: 'Segoe UI', Arial, sans-serif;
   text-align: center;
@@ -29,25 +28,26 @@ section {
   box-sizing: border-box;
 }
 
-section.active { 
-  display: flex; 
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
+section.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-/* UI Elements */
+/* ✅ OVERLAY FIX — FULLY TRANSPARENT */
 .overlay {
-  background: rgba(0, 0, 0, 0.7);
+  background: transparent;        /* FIXED */
   padding: 30px;
   border-radius: 20px;
   max-width: 600px;
   width: 85%;
   margin: auto;
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);      /* keeps elegance */
+  border: 1px solid rgba(255,255,255,0.15);
 }
 
+/* INPUT */
 input {
   padding: 14px;
   width: 240px;
@@ -60,6 +60,7 @@ input {
   background: rgba(255,255,255,0.9);
 }
 
+/* BUTTON */
 button {
   padding: 12px 28px;
   border-radius: 25px;
@@ -74,12 +75,12 @@ button {
   box-shadow: 0 4px 15px rgba(255, 95, 162, 0.3);
 }
 
-button:hover { 
+button:hover {
   transform: scale(1.05);
   background: #ff3b8a;
-  box-shadow: 0 6px 20px rgba(255, 95, 162, 0.5);
 }
 
+/* TITLE */
 #introTitle {
   font-size: 38px;
   font-weight: bold;
@@ -95,6 +96,7 @@ button:hover {
   100%{background-position:100%}
 }
 
+/* VIDEO */
 video {
   width: 90%;
   max-width: 400px;
@@ -102,17 +104,17 @@ video {
   border: 3px solid rgba(255,255,255,0.2);
 }
 
-/* SCROLLING TEXT FIXED */
+/* SCROLLING TEXT */
 #scrollBox {
   max-width: 500px;
   width: 90%;
   margin: 20px auto;
-  height: 220px; 
-  overflow-y: auto; 
+  height: 220px;
+  overflow-y: auto;
   padding: 10px;
   font-size: 19px;
   line-height: 1.8;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 #scrollBox::-webkit-scrollbar { display: none; }
 
@@ -158,7 +160,7 @@ video {
 <section id="page3">
   <div class="overlay">
     <h2>🌟 Why December 31 Is So Special</h2>
-    <p style="text-align: left;">
+    <p style="text-align:left;">
       December 31 isn’t just the end of a year.<br><br>
       It’s the day when hearts feel heavier. When memories speak louder than words.<br><br>
       It’s the day we think about people we couldn’t hold,
@@ -178,7 +180,7 @@ video {
     <button onclick="saveReaction('Smile 😊')">😊 Smile</button>
     <button onclick="saveReaction('Emotional 🥹')">🥹 Emotional</button>
     <button onclick="saveReaction('Loved it ❤️')">❤️ Loved it</button>
-    <div id="reactionResult" style="margin-top:20px; font-weight: bold; color: #ff5fa2;"></div>
+    <div id="reactionResult" style="margin-top:20px; font-weight:bold; color:#ff5fa2;"></div>
   </div>
 </section>
 
@@ -198,21 +200,13 @@ const LINES = [
 let lineIndex = 0;
 
 function unlock(){
-  const input = document.getElementById("password").value.trim();
-  if(input !== PASSWORD){
+  if(document.getElementById("password").value.trim() !== PASSWORD){
     alert("Wrong password ❌");
     return;
   }
-  
-  // Confetti Burst!
-  confetti({
-    particleCount: 150,
-    spread: 70,
-    origin: { y: 0.6 },
-    colors: ['#ff5fa2', '#ffd86f', '#7afcff']
-  });
 
-  // Delay page transition slightly to see confetti
+  confetti({ particleCount:150, spread:70, origin:{y:0.6} });
+
   setTimeout(() => {
     goPage(2);
     setTimeout(showText, 1000);
@@ -231,31 +225,23 @@ function goPage(n){
 }
 
 function showText(){
-  const box = document.getElementById("scrollBox");
-  
   if(lineIndex >= LINES.length){
     document.getElementById("toPage3").style.display = "inline-block";
     return;
   }
-
-  const lineDiv = document.createElement("div");
-  lineDiv.className = "line";
-  lineDiv.innerText = LINES[lineIndex];
-  box.appendChild(lineDiv);
-  
-  // Auto-scroll logic
-  lineDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-  lineIndex++;
-  setTimeout(showText, 2500); 
+  const box = document.getElementById("scrollBox");
+  const d = document.createElement("div");
+  d.className = "line";
+  d.innerText = LINES[lineIndex++];
+  box.appendChild(d);
+  d.scrollIntoView({behavior:'smooth'});
+  setTimeout(showText, 2500);
 }
 
 function saveReaction(val){
   localStorage.setItem("reaction", val);
   document.getElementById("reactionResult").innerText = "Saved reaction: " + val;
-  
-  // Final small confetti pop
-  confetti({ particleCount: 40, spread: 50 });
+  confetti({ particleCount:40, spread:50 });
 }
 </script>
 
